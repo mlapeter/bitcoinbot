@@ -1,0 +1,25 @@
+{
+  "name": "bitcoinbot",
+  "version": "1.0.0",
+  "description": "super basic bot for testing bitcoin trading strategies.",
+  "main": "index.js",
+  "dependencies": {
+    "coinbase": "2.0.8",
+    "node-fetch": "2.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start live": "node index.js live",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "bitcoin",
+    "bot",
+    "trading",
+    "investing",
+    "coinbase"
+  ],
+  "author": "Michael LaPeter",
+  "license": "ISC"
+}
