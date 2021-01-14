@@ -35,6 +35,20 @@ We track the high/low range since we sold. If it's risen 10% of that amount from
 
 Example: Sold at $30,000, it went down to $27,000, then it rose to $27,500. It's rising since it rose more than 10% of that range ($300).
 
+### Optional Text Alerts Via Twilio
+
+If you want to get text alerts, setup your own Twilio account, then add a file called `.env` to the root of the application and put your info in the quotes:
+
+```
+TWILIO_ACCOUNT_SID=""
+TWILIO_AUTH_TOKEN=""
+TWILIO_FROM_NUMBER=""
+TWILIO_TO_NUMBER=""
+TWILIO_TO_NUMBER_2=""
+```
+
+`TWILIO_TO_NUMBER_2` is optional if you want it to text a second number.
+
 ### Notes
 
 10% is just a randomly chosen variable for the rising/ falling threshold. It may be different in the actual code as this strategy is being constantly adjusted.
