@@ -175,13 +175,15 @@ sendText = (message) => {
     })
     .then(message => console.log(message.sid));
 
-  client.messages
-    .create({
-      body: message,
-      from: process.env.TWILIO_FROM_NUMBER,
-      to: process.env.TWILIO_TO_NUMBER_2
-    })
-    .then(message => console.log(message.sid));
+  if (process.env.TWILIO_FROM_NUMBER_2) {
+    client.messages
+      .create({
+        body: message,
+        from: process.env.TWILIO_FROM_NUMBER,
+        to: process.env.TWILIO_TO_NUMBER_2
+      })
+      .then(message => console.log(message.sid));
+  }
 }
 
 start = async () => {
