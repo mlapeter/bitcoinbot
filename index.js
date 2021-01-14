@@ -1,17 +1,20 @@
+require('dotenv').config()
+
 const fetch = require('node-fetch');
 var fs = require('fs');
 
 
+let liveMode = false
 let oldAmount = 0
 
 let lowPriceWhileHolding = 0
 let highPriceWhileHolding = 0
 
-let lowPriceSinceSelling = 0
-let highPriceSinceSelling = 0
+let lowPriceSinceSelling = 39317.57
+let highPriceSinceSelling = 39563.61
 
 let purchasePrice = 0;
-let salePrice = 0;
+let salePrice = 39540.15;
 
 let currentlyHolding = false;
 let profit = 0;
@@ -31,11 +34,13 @@ holdingHighLowDiff = () => {
 
 // if the current price falls 10% from the high since we bought
 fallingPrice = (price) => {
+  if (holdingHighLowDiff() < 1000) { return false }
   return parseFloat(price) < (parseFloat(highPriceWhileHolding) - (holdingHighLowDiff() * 0.10))
 }
 
 // if the current price rises 15% above the low since we sold
 risingPrice = (price) => {
+  if (notHoldinghighLowDiff() < 1000) { return false }
   return parseFloat(price) > (parseFloat(lowPriceSinceSelling) + (notHoldinghighLowDiff() * 0.15))
 }
 
@@ -99,6 +104,10 @@ tradeBitcoin = async (price = null) => {
     console.log("highPriceWhileHolding: ", highPriceWhileHolding);
     console.log("lowPriceWhileHolding: ", lowPriceWhileHolding);
 
+    if (liveMode) {
+      sendText(`SELL SELL SELL! Bitcoin is at ${amount} and dropping fast! `)
+    }
+
     transactionCount += 1
     currentlyHolding = false
     highPriceSinceSelling = amount
@@ -130,6 +139,10 @@ tradeBitcoin = async (price = null) => {
     console.log("highPriceSinceSelling: ", highPriceSinceSelling);
     console.log("lowPriceSinceSelling: ", lowPriceSinceSelling);
 
+    if (liveMode) {
+      sendText(`BUY BUY BUY! Bitcoin is at ${amount} and rising fast! `)
+    }
+
     transactionCount += 1
     currentlyHolding = true
     lowPriceWhileHolding = amount
@@ -148,13 +161,43 @@ tradeBitcoin = async (price = null) => {
 
 }
 
+sendText = (message) => {
+  console.log("Sending Text")
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const authToken = process.env.TWILIO_AUTH_TOKEN;
+  const client = require('twilio')(accountSid, authToken);
+
+  client.messages
+    .create({
+      body: message,
+      from: process.env.TWILIO_FROM_NUMBER,
+      to: process.env.TWILIO_TO_NUMBER
+    })
+    .then(message => console.log(message.sid));
+
+  client.messages
+    .create({
+      body: message,
+      from: process.env.TWILIO_FROM_NUMBER,
+      to: process.env.TWILIO_TO_NUMBER_2
+    })
+    .then(message => console.log(message.sid));
+}
+
 start = async () => {
   console.log("STARTING")
 
   const args = process.argv.slice(2)
   if (args[0] == "live") {
+    liveMode = true
     console.log("Using live bitcoin data...")
     var bitcoinTradingInterval = setInterval(() => { tradeBitcoin() }, 5000)
+
+
+    if (process.env.TWILIO_FROM_NUMBER) {
+      sendText("Text Alerts Online!")
+    }
+
 
   } else {
     console.log("Using historical bitcoin data...")

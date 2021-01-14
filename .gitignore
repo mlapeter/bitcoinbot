@@ -106,3 +106,6 @@ dist
 
 # for locally saving bitcoin prices
 array2.csv
+
+.env
+

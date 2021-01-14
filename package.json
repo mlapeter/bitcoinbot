@@ -5,13 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "coinbase": "2.0.8",
-    "node-fetch": "2.6.1"
+    "dotenv": "8.2.0",
+    "node-fetch": "2.6.1",
+    "twilio": "3.54.2"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start live": "node index.js live",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test-text": "node -e 'require(\"./index\").sendText(text notifications online!)' "
   },
   "keywords": [
     "bitcoin",
