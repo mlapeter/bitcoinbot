@@ -57,13 +57,13 @@ tradeBitcoin = async (price = null) => {
     let { data } = json
     amount = data.amount
 
-    if (amount != oldAmount) {
-      console.log(amount)
-      oldAmount = amount
-      fs.appendFile('array2.csv', amount.toString() + ',', (err) => {
-        if (err) throw err;
-      });
-    }
+    // if (amount != oldAmount) {
+    //   console.log(amount)
+    //   oldAmount = amount
+    //   fs.appendFile('array2.csv', amount.toString() + ',', (err) => {
+    //     if (err) throw err;
+    //   });
+    // }
   }
 
 

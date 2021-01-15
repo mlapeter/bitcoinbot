@@ -1,1 +1,1 @@
-worker: npm run start live
+worker: node index.js live
