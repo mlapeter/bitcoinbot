@@ -4,17 +4,25 @@ const fetch = require('node-fetch');
 var fs = require('fs');
 
 
+let { lowPriceSinceSelling = 0, highPriceSinceSelling = 0, salePrice = 0 } = process.env.STARTING_DATA
+
+console.log("lowPriceSinceSelling: ", lowPriceSinceSelling)
+console.log("highPriceSinceSelling: ", highPriceSinceSelling)
+console.log("salePrice: ", salePrice)
+
+
+
 let liveMode = false
 let oldAmount = 0
 
 let lowPriceWhileHolding = 0
 let highPriceWhileHolding = 0
 
-let lowPriceSinceSelling = 39317.57
-let highPriceSinceSelling = 39563.61
+// let lowPriceSinceSelling = 39317.57
+// let highPriceSinceSelling = 39563.61
 
 let purchasePrice = 0;
-let salePrice = 39540.15;
+// let salePrice = 39540.15;
 
 let currentlyHolding = false;
 let profit = 0;
