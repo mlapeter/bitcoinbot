@@ -29,6 +29,21 @@ let profit = 0;
 let totalProfit = 0
 let transactionCount = 0
 
+currentDate = () => {
+  return new Date().toLocaleDateString(
+    'en-gb',
+    {
+      hour: "numeric",
+      minute: "numeric",
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      timeZone: 'America/Los_Angeles'
+    }
+  );
+}
+
+
 notHoldinghighLowDiff = () => {
   return parseFloat(highPriceSinceSelling) - parseFloat(lowPriceSinceSelling)
 }
@@ -65,13 +80,13 @@ tradeBitcoin = async (price = null) => {
     let { data } = json
     amount = data.amount
 
-    // if (amount != oldAmount) {
-    //   console.log(amount)
-    //   oldAmount = amount
-    //   fs.appendFile('array2.csv', amount.toString() + ',', (err) => {
-    //     if (err) throw err;
-    //   });
-    // }
+    if (amount != oldAmount) {
+      console.log(amount)
+      oldAmount = amount
+      // fs.appendFile('array2.csv', amount.toString() + ',', (err) => {
+      //   if (err) throw err;
+      // });
+    }
   }
 
 
@@ -107,12 +122,13 @@ tradeBitcoin = async (price = null) => {
   // Only sell if fallingPrice AND we won't lose money (so higher than purchase price PLUS 1% total coinbase commission)
   if (currentlyHolding && fallingPrice(amount) && (parseFloat(amount) > parseFloat(purchasePrice) * 1.03)) {
     console.log("--------- SELLING --------------")
+    console.log(currentDate())
     console.log("CURRENT PRICE: ", amount)
     console.log("holdingHighLowDiff: ", holdingHighLowDiff())
     console.log("highPriceWhileHolding: ", highPriceWhileHolding);
     console.log("lowPriceWhileHolding: ", lowPriceWhileHolding);
 
-    if (liveMode) {
+    if (liveMode && process.env.TWILIO_TO_NUMBER) {
       sendText(`SELL SELL SELL! Bitcoin is at ${amount} and dropping fast! `)
     }
 
@@ -140,6 +156,7 @@ tradeBitcoin = async (price = null) => {
 
   if (!currentlyHolding && risingPrice(amount)) {
     console.log("--------- BUYING --------------")
+    console.log(currentDate())
     console.log("CURRENT PRICE: ", amount)
     console.log("risingPrice Amount: ", parseFloat(lowPriceSinceSelling) + (notHoldinghighLowDiff() * 0.15))
 
@@ -147,7 +164,7 @@ tradeBitcoin = async (price = null) => {
     console.log("highPriceSinceSelling: ", highPriceSinceSelling);
     console.log("lowPriceSinceSelling: ", lowPriceSinceSelling);
 
-    if (liveMode) {
+    if (liveMode && process.env.TWILIO_TO_NUMBER) {
       sendText(`BUY BUY BUY! Bitcoin is at ${amount} and rising fast! `)
     }
 
@@ -204,7 +221,7 @@ start = async () => {
     var bitcoinTradingInterval = setInterval(() => { tradeBitcoin() }, 5000)
 
 
-    if (process.env.TWILIO_FROM_NUMBER) {
+    if (process.env.TWILIO_TO_NUMBER) {
       sendText("Text Alerts Online!")
     }
 
